@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau de bord RH, octobre 2026</title>
+<style>
+:root {
+  --primaire: #0F1A3A; --secondaire: #BC872B; --accent: #BC872B;
+  --sur-primaire: #FFFFFF; --titres: #0F1A3A; --texte: #1F2328; --doux: #5B6168;
+  --fond: #FFFFFF; --fond-doux: #ECEDEF; --trait: #C3C6CE; --alerte: #B42318;
+  --police-titres: 'DejaVu Sans', 'Segoe UI', Arial, sans-serif; --police-texte: 'DejaVu Sans', 'Segoe UI', Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond-doux); color: var(--texte); font-family: var(--police-texte); font-size: 15px; line-height: 1.45; }
+header { background: var(--fond); border-top: 6px solid var(--primaire); border-bottom: 1px solid var(--trait); padding: 14px 16px; }
+.barre { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+header img { height: 44px; width: auto; display: block; }
+header .per { text-align: right; color: var(--doux); font-size: 13px; }
+header .per b { display: block; font-family: var(--police-titres); color: var(--titres); font-size: 18px; }
+main { max-width: 1180px; margin: 0 auto; padding: 16px; }
+.kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 14px; }
+.kpi { background: var(--fond); border-top: 4px solid var(--primaire); padding: 12px; border-radius: 4px; min-width: 0; }
+.kpi.alerte { border-top-color: var(--alerte); }
+.kpi .lib { color: var(--doux); font-size: 13px; }
+.kpi .val { font-family: var(--police-titres); color: var(--titres); font-size: 26px; font-weight: 700; margin: 2px 0; white-space: nowrap; }
+.kpi .com { font-size: 12.5px; }
+.grille { display: grid; grid-template-columns: 3fr 2fr; gap: 12px; }
+.carte { background: var(--fond); padding: 14px 16px; border-radius: 4px; margin-bottom: 12px; min-width: 0; }
+h2 { font-family: var(--police-titres); color: var(--titres); font-size: 17px; margin: 0 0 8px; }
+.note { color: var(--doux); font-size: 12px; margin: 6px 0 0; }
+svg { display: block; width: 100%; height: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; background: var(--primaire); color: var(--sur-primaire); padding: 7px 8px; font-weight: 600; }
+td { padding: 7px 8px; border-bottom: 1px solid var(--trait); }
+td.n, th.n { text-align: right; white-space: nowrap; }
+.rouge { color: var(--alerte); font-weight: 700; }
+ul.alertes { list-style: none; margin: 0; padding: 0; } ul.alertes li { padding: 7px 0 7px 18px; border-bottom: 1px solid var(--trait); position: relative; }
+ul.alertes li::before { content: ""; position: absolute; left: 2px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--alerte); }
+ol { margin: 0; padding-left: 20px; } ol li { margin-bottom: 8px; } ol small { color: var(--doux); display: block; }
+footer { max-width: 1180px; margin: 0 auto; padding: 4px 16px 24px; color: var(--doux); font-size: 12px; }
+@media (max-width: 1000px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 860px) { .grille { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .kpis { grid-template-columns: repeat(2, 1fr); gap: 8px; } .kpi { padding: 10px; } .kpi .val { font-size: 22px; } table { font-size: 13px; } td, th { padding: 6px 5px; } }
+</style>
+</head>
+<body><div style="background:#BC872B;color:#0F1A3A;font-family:Arial,sans-serif;font-weight:bold;font-size:13px;padding:8px 12px;text-align:center;">FICTIF : scénario de test NSIA Banque, données internes inventées. Brouillon, rien n'est envoyé.</div>
+<header><div class="barre">
+  <img src="https://www.nsiabanque.ci/wp-content/uploads/2026/04/LOGO-NSIA-BANQUE_HD_fond-blanc.png" alt="NSIA Banque (FICTIF)">
+  <div class="per"><b>Tableau de bord RH</b>Octobre 2026, édité le 23/10/2026</div>
+</div></header>
+<main>
+  <section class="kpis" id="kpis"></section>
+  <div class="grille">
+    <div>
+      <div class="carte"><h2>Masse salariale brute sur six mois</h2><div id="g-masse"></div><p class="note">En millions de FCFA, montants du logiciel de paie.</p></div>
+      <div class="carte"><h2>Journaliers du 01/10/2026 au 31/10/2026</h2><table id="t-journaliers"></table><p class="note" id="n-journaliers"></p></div>
+    </div>
+    <div>
+      <div class="carte"><h2>Points à lever</h2><ul class="alertes" id="alertes"></ul></div>
+      <div class="carte"><h2>Décisions demandées</h2><ol id="decisions"></ol></div>
+      <div class="carte"><h2>Échéances à venir</h2><table id="t-echeances"></table></div>
+      <div class="carte"><h2>Effectif par service</h2><div id="g-services"></div></div>
+    </div>
+  </div>
+</main>
+<footer>FICTIF : document de test, NSIA Banque (charte relevée sur nsiabanque.ci) ; personnes, montants et dates internes inventés. Document confidentiel, réservé à son destinataire. FICTIF, ne pas diffuser. Données personnelles : diffusion limitée à la direction.</footer>
+
+<script type="application/json" id="donnees">{"alertes": ["Journalier présent depuis 110 jours : Lassina Soro", "Dossier d'embauche incomplet : Grâce Ehouman"], "decisions": [{"echeance": "Avant le 6 novembre", "texte": "Décider du remplacement de Seydou Bamba au recouvrement de Treichville (recrutement ou mobilité interne)"}, {"echeance": "Au comité du 30 octobre", "texte": "Arbitrer le renfort de caisse demandé en fin de mois à Yopougon"}, {"echeance": "Avant la clôture de novembre", "texte": "Fixer une règle pour les heures du samedi au Plateau (récupération ou paiement)"}], "devise": "FCFA", "echeances": [{"date": "2026-11-18", "nom": "Grâce Ehouman", "objet": "Rendez-vous d'intégration à 30 jours"}, {"date": "2026-10-30", "nom": "Yao Serge Konan", "objet": "Entretien annuel"}], "hist": [{"brut": 5929772, "libelle": "sept.", "mois": "2026-09"}, {"brut": 6127546, "libelle": "oct.", "mois": "2026-10"}], "journaliers": [{"alerte": true, "cumul": 110, "jours": 5, "nom": "Lassina Soro", "reste": 0}, {"alerte": false, "cumul": 34, "jours": 4, "nom": "Kader Ouattara", "reste": 0}, {"alerte": false, "cumul": 5, "jours": 5, "nom": "Rodrigue Assi", "reste": 0}, {"alerte": false, "cumul": 3, "jours": 3, "nom": "Prisca Zadi", "reste": 0}, {"alerte": false, "cumul": 5, "jours": 5, "nom": "Abou Sangaré", "reste": 7500}], "kpis": [{"commentaire": "1 entrée, 1 sortie dans le mois", "format": "nb", "libelle": "Effectif au 31/10/2026", "valeur": 9}, {"commentaire": "+3,3 % sur septembre", "format": "m", "libelle": "Masse salariale brute", "valeur": 6127546}, {"commentaire": "brut et charges employeur", "format": "m", "libelle": "Coût employeur", "valeur": 6662487}, {"alerte": true, "commentaire": "3 jours sur 220 jours ouvrés", "format": "pct", "libelle": "Absentéisme non planifié", "valeur": 0.013636363636363636}, {"commentaire": "heures payées dans le mois", "format": "nb", "libelle": "Heures supplémentaires", "valeur": 18}, {"alerte": true, "commentaire": "jours-personne, 7 500 FCFA restant à payer", "format": "nb", "libelle": "Journaliers", "valeur": 22}], "services": [["Agence Plateau", 3], ["Agence Cocody", 2], ["Ressources humaines", 2], ["Agence Yopougon", 1], ["Agence Marcory", 1]], "seuil": 60}</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById("donnees").textContent);
+  var css = getComputedStyle(document.documentElement);
+  var C = function (n) { return css.getPropertyValue("--" + n).trim(); };
+  var NS = "http://www.w3.org/2000/svg";
+  var nb = function (v) { return Math.round(v).toLocaleString("fr-FR").replace(/ /g, " "); };
+  var mil = function (v) { return (Math.round(v / 1e4) / 100).toLocaleString("fr-FR", {minimumFractionDigits: 2}) + " M"; };
+  var pct = function (v) { return (Math.round(v * 1000) / 10).toLocaleString("fr-FR", {minimumFractionDigits: 1}) + " %"; };
+  var date = function (s) { return s ? s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(0, 4) : "-"; };
+  var esc = function (s) { var e = document.createElement("span"); e.textContent = s; return e.innerHTML; };
+  function el(nom, attrs, parent, texte) {
+    var e = document.createElementNS(NS, nom);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (texte !== undefined) e.textContent = texte;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  var fmt = {nb: nb, m: mil, pct: pct};
+  document.getElementById("kpis").innerHTML = D.kpis.map(function (k) {
+    return '<div class="kpi' + (k.alerte ? ' alerte' : '') + '"><div class="lib">' + esc(k.libelle) + '</div><div class="val">'
+      + fmt[k.format](k.valeur) + '</div><div class="com">' + esc(k.commentaire) + '</div></div>';
+  }).join("");
+
+  (function () {
+    var box = document.getElementById("g-masse");
+    var W = Math.max(300, box.clientWidth || 640), H = 230, h = 26, b = 30, n = D.hist.length, pas = (W - 20) / n;
+    var mx = Math.max.apply(null, D.hist.map(function (x) { return x.brut; }));
+    var s = el("svg", {viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Masse salariale brute"});
+    D.hist.forEach(function (x, i) {
+      var hb = (H - h - b) * x.brut / mx, x0 = 10 + pas * i + pas * 0.18, lb = pas * 0.64, der = i === n - 1;
+      el("rect", {x: x0, y: H - b - hb, width: lb, height: hb, fill: der ? C("primaire") : C("trait"), rx: 3}, s);
+      el("text", {x: x0 + lb / 2, y: H - b - hb - 7, "font-size": W < 420 ? 11 : 13, "font-weight": 700, "text-anchor": "middle", fill: C("texte")}, s, mil(x.brut).replace(" M", ""));
+      el("text", {x: x0 + lb / 2, y: H - 9, "font-size": 12, "text-anchor": "middle", fill: C("doux")}, s, x.libelle);
+    });
+    el("line", {x1: 10, x2: W - 10, y1: H - b, y2: H - b, stroke: "#9CA3AF"}, s);
+    box.appendChild(s);
+  })();
+
+  (function () {
+    var box = document.getElementById("g-services");
+    var W = Math.max(280, box.clientWidth || 400), ligne = 34, H = ligne * D.services.length + 6, g = 110;
+    var mx = Math.max.apply(null, D.services.map(function (x) { return x[1]; }));
+    var s = el("svg", {viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Effectif par service"});
+    D.services.forEach(function (x, i) {
+      var y0 = 4 + i * ligne, w = (W - g - 40) * x[1] / mx;
+      el("text", {x: g - 8, y: y0 + 19, "font-size": 13, "text-anchor": "end", fill: C("texte")}, s, x[0]);
+      el("rect", {x: g, y: y0 + 5, width: w, height: 20, fill: C("primaire"), rx: 3}, s);
+      el("text", {x: g + w + 6, y: y0 + 20, "font-size": 13, "font-weight": 700, fill: C("texte")}, s, x[1]);
+    });
+    box.appendChild(s);
+  })();
+
+  document.getElementById("alertes").innerHTML = D.alertes.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
+  document.getElementById("decisions").innerHTML = D.decisions.map(function (x) { return "<li><b>" + esc(x.texte) + "</b><small>" + esc(x.echeance) + "</small></li>"; }).join("");
+  document.getElementById("t-echeances").innerHTML = "<tr><th>Salarié</th><th>Échéance</th><th class='n'>Date</th></tr>" + D.echeances.map(function (x) {
+    return "<tr><td>" + esc(x.nom) + "</td><td>" + esc(x.objet) + "</td><td class='n'>" + date(x.date) + "</td></tr>"; }).join("");
+  document.getElementById("t-journaliers").innerHTML = "<tr><th>Nom</th><th class='n'>Jours</th><th class='n'>Reste dû</th><th class='n'>Cumul</th></tr>" + D.journaliers.map(function (x) {
+    return "<tr><td>" + esc(x.nom) + "</td><td class='n'>" + x.jours + "</td><td class='n" + (x.reste ? " rouge" : "") + "'>" + nb(x.reste) + "</td><td class='n" + (x.alerte ? " rouge" : "") + "'>" + x.cumul + " j</td></tr>"; }).join("");
+  document.getElementById("n-journaliers").textContent = "Montants en " + D.devise + ". Cumul en rouge : présence au-delà de " + D.seuil + " jours, à arbitrer.";
+})();
+</script>
+</body>
+</html>
